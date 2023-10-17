@@ -1,4 +1,6 @@
-const robots = [
+import { useState } from "react";
+
+const initialRobots = [
   {
     id: 1,
     name: "Leanne Graham",
@@ -62,11 +64,13 @@ const robots = [
 ];
 
 export default function App() {
+  const [robots, setRobots] = useState(initialRobots);
+
   return (
-    <div className="App">
+    <div className="tc">
       <Title></Title>
-      <Form></Form>
-      <CardList></CardList>
+      <Form robots={robots}></Form>
+      <RobotsCardList robots={robots}></RobotsCardList>
     </div>
   );
 }
@@ -79,29 +83,52 @@ function Title() {
   );
 }
 
-function Form() {
+function Form({ robots }) {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleInputChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
   return (
-    <div>
-      <input></input>
-    </div>
+    <form className="pa2">
+      <input
+        className="pa3 ba b--green bg-lightest-blue"
+        type="search"
+        placeholder="search Robots..."
+        value={searchTerm}
+        onChange={handleInputChange}
+      ></input>
+      <ul>
+        {robots
+          .filter((robots) =>
+            robots.name.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+          .map((robot) => (
+            <RobotCard key={robot.id}>{robot}</RobotCard>
+          ))}
+      </ul>
+    </form>
   );
 }
 
-function CardList({ robots }) {
+function RobotsCardList({ robots }) {
   return (
-    <div>
-      <Card id={robot.id} name={robot.name} email={robot.email} />
-    </div>
+    <ul>
+      {robots.map((robot) => (
+        <RobotCard robot={robot} key={robot.id} />
+      ))}
+    </ul>
   );
 }
 
-function Card({ robot }) {
+function RobotCard({ robot }) {
   return (
-    <div className="bg-light-green dib br3 pa3 ma2 grow bw2 shadow-5">
-      <img alt="photo1" src="https://robohash.org/test?200x200"></img>
+    <div className="tc bg-light-green dib br3 pa3 ma2 grow bw2 shadow-5">
+      <img alt="photo1" src={`https://robohash.org/${robot.id}?200x200`}></img>
       <div>
-        <h2>Ayo</h2>
-        <p>fjfjfj</p>
+        <h2>{robot.name}</h2>
+        <p>{robot.email}</p>
       </div>
     </div>
   );
