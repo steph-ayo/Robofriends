@@ -79,6 +79,7 @@ function Title() {
   return (
     <div>
       <h3>Robofriends</h3>
+      <p>By Popoola.dev</p>
     </div>
   );
 }
